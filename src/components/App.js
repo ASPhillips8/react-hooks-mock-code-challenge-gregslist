@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from "react"
 import Header from "./Header"
 import ListingsContainer from "./ListingsContainer"
+import Form from "./Form"
 
 function App() {
   const [listings, setListings] = useState([])
   const [searchInput, setSearchInput] = useState("")
+  const [isSortListing, setIsSortListing] = useState(false)
 
   const filteredItems = listings.filter((listing) =>
     listing.description.toLowerCase().includes(searchInput.toLowerCase())
   )
 
+  const sortedItems = isSortListing
+    ? [...filteredItems].sort((a, b) =>
+        a.location.toLowerCase().localeCompare(b.location.toLowerCase())
+      )
+    : filteredItems
+
   useEffect(() => {
     fetch("http://localhost:6001/listings")
       .then((response) => response.json())
       .then((listingData) => setListings(listingData))
+      .catch((error) => console.error("Fetch error:", error))
   }, [])
 
   function handleDeleteListing(id) {
@@ -25,11 +34,16 @@ function App() {
     setSearchInput(search)
   }
 
+  function handleSortChange() {
+    setIsSortListing(!isSortListing)
+  }
+
   return (
     <div className="app">
-      <Header onSearch={handleSearchItem} />
+      <Header onSearch={handleSearchItem} onSortChange={handleSortChange} />
+      <Form />
       <ListingsContainer
-        listings={filteredItems}
+        listings={sortedItems}
         onDelete={handleDeleteListing}
       />
     </div>
