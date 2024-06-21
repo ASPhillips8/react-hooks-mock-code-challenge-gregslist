@@ -38,10 +38,14 @@ function App() {
     setIsSortListing(!isSortListing)
   }
 
+  function handleSubmitForm(newListing) {
+    setListings([...listings, newListing])
+  }
+
   return (
     <div className="app">
       <Header onSearch={handleSearchItem} onSortChange={handleSortChange} />
-      <Form />
+      <Form onHandleSubmitForm={handleSubmitForm} />
       <ListingsContainer
         listings={sortedItems}
         onDelete={handleDeleteListing}

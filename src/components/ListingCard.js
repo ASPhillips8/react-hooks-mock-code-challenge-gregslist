@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 
-function ListingCard({ listing, onDelete }) {
+function ListingCard({
+  listing: { id, description, image, location },
+  onDelete,
+}) {
   const [favorite, setFavorite] = useState(false)
-  const { id, description, image, location } = listing
 
   function handleFavoriteClick() {
     setFavorite(!favorite)
